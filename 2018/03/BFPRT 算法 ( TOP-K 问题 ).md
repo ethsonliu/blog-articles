@@ -33,7 +33,7 @@ BFPRT算法步骤如下：
 
 ![](https://subetter.com/images/figures/20180325_01.png)
 
-BFPRT()调用GetPivotIndex()和Partition()来求解第k小，在这过程中，GetPivotIndex()也调用了BFPRT()，即GetPivotIndex)和BFPRT()为互递归的关系。
+BFPRT()调用GetPivotIndex()和Partition()来求解第k小，在这过程中，GetPivotIndex()也调用了BFPRT()，即GetPivotIndex()和BFPRT()为互递归的关系。
 
 下面为代码实现，其所求为**前k小的数**：
 
