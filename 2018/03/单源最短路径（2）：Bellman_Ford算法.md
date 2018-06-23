@@ -6,15 +6,16 @@
 > [单源最短路径（4）：总结](https://subetter.com/articles/2018/03/single-source-shortest-path-summary.html)
 
 ## 一：背景
+
 Dijkstra算法是处理单源最短路径的有效算法，但它对存在负权回路的图就会失效。这时候，就需要使用其他的算法来应对这个问题，Bellman-Ford（中文名：贝尔曼-福特）算法就是其中一个。
 
 Bellman-Ford算法不仅可以求出最短路径，也可以检测负权回路的问题。该算法由美国数学家理查德•贝尔曼（Richard Bellman, 动态规划的提出者）和小莱斯特•福特（Lester Ford）发明。
 
-
 ## 二：算法过程分析
+
 对于一个不存在负权回路的图，Bellman-Ford算法求解最短路径的方法如下：
 
-设其顶点数为n，边数为m。设其源点为source，数组`dist[i]`记录从源点source到顶点i的最短路径，除了`dist[source]`初始化为0外，其它`dist[]`皆初始化为MAX。以下操作循环执行n-1次：
+设其顶点数为n，边数为m。设其源点为source，数组`dist[i]`记录从源点source到顶点i的最短路径，除了`dist[source]`初始化为0外，其它`dist[]`皆初始化为INT_MAX。以下操作循环执行n-1次：
 
 *  对于每一条边arc(u, v)，如果dist[u] + w(u, v) < dist[v]，则使dist[v] = dist[u] + w(u, v)，其中w(u, v)为边arc(u, v)的权值。
 
@@ -42,8 +43,6 @@ n-1次循环，Bellman-Ford算法就是利用已经找到的最短路径去更�
 
 using namespace std;
 
-#define MAX 10000  // 假设权值最大不超过 10000
-
 struct Edge
 {
 	int u;
@@ -62,7 +61,7 @@ bool BellmanFord()
 {
 	// 初始化
 	for (int i = 0; i < vertex_num; i++)
-		dist[i] = (i == source) ? 0 : MAX;
+		dist[i] = (i == source) ? 0 : INT_MAX;
 
 	// n-1 次循环求最短路径
 	for (int i = 1; i <= vertex_num - 1; i++)
@@ -79,7 +78,7 @@ bool BellmanFord()
 
 	bool flag = true;  // 标记是否有负权回路
 
-					   // 第 n 次循环判断负权回路
+	// 第 n 次循环判断负权回路
 	for (int i = 0; i < edge_num; i++)
 	{
 		if (dist[edge[i].v] > dist[edge[i].u] + edge[i].w)
@@ -158,20 +157,17 @@ int main()
 2 3 2
 存在负权回路!
 ```
-
 ## 四：算法优化
 
 以下除非特殊说明，否则都默认是不存在负权回路的。
 
 先来看看Bellman-Ford算法为何需要循环n-1次来求解最短路径？
 
-读者可以从Dijkstra算法来考虑，想一下，Dijkstra从源点开始，更新`dist[]`，找到最小值，再更新`dist[]` ，，，每次循环都可以确定一个点的最短路。Bellman-Ford算法同样也是这样，它的每次循环也可以确定一个点的最短路，只不过代价很大，因为Bellman-Ford每次循环都是操作所有边。
+读者可以从Dijkstra算法来考虑，想一下，Dijkstra从源点开始，更新`dist[]`，找到最小值，再更新`dist[]` ，，，每次循环都可以确定至少一个点的最短路。Bellman-Ford算法同样也是这样，它的每次循环也可以确定至少一个点的最短路，故需要n-1次循环。
 
-既然代价这么大，相比Dijkstra算法，Bellman-Ford算法还有啥用？因为后者可以检测负权回路啊。
+Bellman-Ford算法的时间复杂度为$O(nm)$，其中n为顶点数，m为边数。每一次循环都需要对m条边进行操作，$O(nm)$的时间，其实大多数都浪费了。
 
-Bellman-Ford算法的时间复杂度为$O(nm)$，其中n为顶点数，m为边数。
-
-$O(nm)$的时间，大多数都浪费了。考虑一个随机图（点和边随机生成），除了已确定最短路的顶点与尚未确定最短路的顶点之间的边，其它的边所做的都是无用的，大致描述为下图（分割线以左为已确定最短路的顶点）：
+大家可以考虑一个随机图（点和边随机生成），除了已确定最短路的顶点与尚未确定最短路的顶点之间的边，其它的边所做的都是无用的，大致描述为下图（分割线以左为已确定最短路的顶点）：
 
 ![](https://subetter.com/images/figures/20180330_07.png)
 
