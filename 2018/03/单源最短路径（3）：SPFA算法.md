@@ -85,23 +85,14 @@ void Print()
     {
         if (i != source)
         {
-            int p = i;
-            stack<int> s;
-            cout << "顶点 " << source << " 到顶点 " << p << " 的最短路径是： ";
-
-            while (source != p)  // 路径顺序是逆向的，所以先保存到栈
+            cout << source << " 到 " << i << " 的最短距离是：" << dist[i] << "，路径是：" << i;
+            int t = path[i];
+            while (t != source)
             {
-                s.push(p);
-                p = path[p];
+                cout << "--" << t;
+                t = path[t];
             }
-
-            cout << source;
-            while (!s.empty())  // 依次从栈中取出的才是正序路径
-            {
-                cout << "--" << s.top();
-                s.pop();
-            }
-            cout << "    最短路径长度是：" << dist[i] << endl;
+            cout << "--" << source << endl;
         }
     }
 }
@@ -116,7 +107,7 @@ int main()
         for (int j = 0; j < vertex_num; j++)
             matrix[i][j] = (i != j) ? INT_MAX : 0;  // 初始化 matrix 数组
 
-    cout << "请输入" << edge_num << "条边的信息：\n";
+    cout << "请输入 " << edge_num << " 条边的信息：\n";
     int u, v, w;
     for (int i = 0; i < edge_num; i++)
     {
@@ -127,7 +118,7 @@ int main()
     if (SPFA())
         Print();
     else
-        cout << "Sorry,it have negative circle!\n";
+        cout << "存在负权回路!\n";
 
     return 0;
 }
@@ -135,7 +126,33 @@ int main()
 
 运行如下：
 
-![](https://subetter.com/images/figures/20180330_06.jpg)
+```
+/* Test 1 */
+请输入图的顶点数，边数，源点：5 7 0
+请输入 7 条边的信息：
+0 1 100
+0 2 30
+0 4 10
+2 1 60
+2 3 60
+3 1 10
+4 3 50
+0 到 1 的最短距离是：70，路径是：1--3--4--0
+0 到 2 的最短距离是：30，路径是：2--0
+0 到 3 的最短距离是：60，路径是：3--4--0
+0 到 4 的最短距离是：10，路径是：4--0
+
+/* Test 2 */
+请输入图的顶点数，边数，源点：4 6 0
+请输入 6 条边的信息：
+0 1 20
+0 2 5
+3 0 -200
+1 3 4
+3 1 4
+2 3 2
+存在负权回路!
+```
 
 ## 四：判断负权回路的证明
 
