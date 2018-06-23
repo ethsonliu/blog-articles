@@ -30,7 +30,10 @@
 
 #define MOD 100000
 
-int digits_to_int(int digits[], int n)
+/**
+ * 将数组 digits[0, n-1] 转换成一个整数，并返回。
+ */
+int DigitsToInt(int digits[], int n)
 {
 	int res = 0;
 	int pow10 = 1;
@@ -82,7 +85,7 @@ int main()
 
 				if (next_digit > 0 && too_much == false) // 剔去前导为 0 的数字
 				{
-					res += digits_to_int(digits, (digit_index > 5) ? 5 : digit_index) * (n / digit_index);
+					res += DigitsToInt(digits, (digit_index > 5) ? 5 : digit_index) * (n / digit_index);
 					res %= MOD;
 				}
 			}
@@ -128,7 +131,7 @@ int main()
 			}
 		}
 
-		printf("n = %d, the sum (mod 100000) is: %d\n", n, res);
+		printf("n = %d, the sum (mod 100000) is: %d\n\n", n, res);
 	}
 	return 0;
 }
@@ -136,7 +139,19 @@ int main()
 
 测试如下：
 
-![](https://subetter.com/images/figures/20180328_02.PNG)
+```
+1
+n = 1, the sum (mod 100000) is: 0
+
+2
+n = 2, the sum (mod 100000) is: 495
+
+3
+n = 3, the sum (mod 100000) is: 5490
+
+100
+n = 100, the sum (mod 100000) is: 59206
+```
 
 最后有两点需要提示下：
 
