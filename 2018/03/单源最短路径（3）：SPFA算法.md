@@ -1,6 +1,6 @@
 > 系列文章目录
 >
-> [单源最短路径（1）：Dijkstra算法](https://61mon.com/articles/2018/03/dijkstra-algorithm.html)
+> [单源最短路径（1）：Dijkstra算法](https://subetter.com/articles/2018/03/dijkstra-algorithm.html)
 > [单源最短路径（2）：Bellman_Ford算法](https://subetter.com/articles/2018/03/bellman-ford-algorithm.html)
 > 单源最短路径（3）：SPFA算法
 > [单源最短路径（4）：总结](https://subetter.com/articles/2018/03/single-source-shortest-path-summary.html)
