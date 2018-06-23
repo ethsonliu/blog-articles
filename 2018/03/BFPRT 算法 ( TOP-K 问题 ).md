@@ -23,8 +23,8 @@
 BFPRT算法步骤如下：
 
 1. 选取主元；
-  1.1. 将n个元素划分为$⌊\frac n5⌋$个组，每组5个元素，若有剩余，舍去；
-  1.2. 使用插入排序找到$⌊\frac n5⌋$个组中每一组的中位数；
+  1.1. 将n个元素按顺序分为$⌊\frac n5⌋$个组，每组5个元素，若有剩余，舍去；
+  1.2. 对于这$⌊\frac n5⌋$个组中的每一组使用插入排序找到它们各自的中位数；
   1.3. 对于 1.2 中找到的所有中位数，调用BFPRT算法求出它们的中位数，作为主元；
 2. 以 1.3 选取的主元为分界点，把小于主元的放在左边，大于主元的放在右边；
 3. 判断主元的位置与k的大小，有选择的对左边或右边递归。
@@ -46,11 +46,11 @@ using namespace std;
 int InsertSort(int array[], int left, int right);
 int GetPivotIndex(int array[], int left, int right);
 int Partition(int array[], int left, int right, int pivot_index);
-int BFPRT(int array[], int left, int right, const int & k);
+int BFPRT(int array[], int left, int right, int k);
 
 int main()
 {
-	int k = 8;
+	int k = 8; // 1 <= k <= array.size
 	int array[20] = { 11,9,10,1,13,8,15,0,16,2,17,5,14,3,6,18,12,7,19,4 };
 
 	cout << "原数组：";
@@ -59,7 +59,7 @@ int main()
 	cout << endl;
 
 	// 因为是以 k 为划分，所以还可以求出第 k 小值
-	cout << "第" << k << "小值为：" << array[BFPRT(array, 0, 19, k)] << endl;
+	cout << "第 " << k << " 小值为：" << array[BFPRT(array, 0, 19, k)] << endl;
 
 	cout << "变换后的数组：";
 	for (int i = 0; i < 20; i++)
@@ -69,6 +69,10 @@ int main()
 	return 0;
 }
 
+/**
+ * 对数组 array[left, right] 进行插入排序，并返回 [left, right]
+ * 的中位数。
+ */
 int InsertSort(int array[], int left, int right)
 {
 	int temp;
@@ -86,7 +90,13 @@ int InsertSort(int array[], int left, int right)
 	return ((right - left) >> 1) + left;
 }
 
-/* 返回中位数的中位数下标 */
+/**
+ * 数组 array[left, right] 每五个元素作为一组，并计算每组的中位数，
+ * 最后返回这些中位数的中位数下标（即主元下标）。
+ *
+ * @attention 末尾返回语句最后一个参数多加一个 1 的作用其实就是向上取整的意思，
+ * 这样可以始终保持 k 大于 0。
+ */
 int GetPivotIndex(int array[], int left, int right)
 {
 	if (right - left < 5)
@@ -94,44 +104,54 @@ int GetPivotIndex(int array[], int left, int right)
 
 	int sub_right = left - 1;
 
+	// 每五个作为一组，求出中位数，并把这些中位数全部依次移动到数组左边
 	for (int i = left; i + 4 <= right; i += 5)
 	{
-		int index = InsertSort(array, i, i + 4);  // 找到五个元素的中位数的下标
-		swap(array[++sub_right], array[index]);   // 依次放在左侧
+		int index = InsertSort(array, i, i + 4);
+		swap(array[++sub_right], array[index]);
 	}
 
+	// 利用 BFPRT 得到这些中位数的中位数下标（即主元下标）
 	return BFPRT(array, left, sub_right, ((sub_right - left + 1) >> 1) + 1);
 }
 
-/* 利用中位数的中位数的下标进行划分，返回分界线下标 */
+/**
+ * 利用主元下标 pivot_index 进行对数组 array[left, right] 划分，并返回
+ * 划分后的分界线下标。
+ */
 int Partition(int array[], int left, int right, int pivot_index)
 {
-	swap(array[pivot_index], array[right]);  // 把主元放置于末尾
-	int divide_index = left;                 // 跟踪划分的分界线
+	swap(array[pivot_index], array[right]); // 把主元放置于末尾
 
+	int partition_index = left; // 跟踪划分的分界线
 	for (int i = left; i < right; i++)
 	{
 		if (array[i] < array[right])
-			swap(array[divide_index++], array[i]);  // 比主元小的都放在左侧
+		{
+			swap(array[partition_index++], array[i]); // 比主元小的都放在左侧
+		}
 	}
 
-	swap(array[divide_index], array[right]);  // 最后把主元换回来
+	swap(array[partition_index], array[right]); // 最后把主元换回来
 
-	return divide_index;
+	return partition_index;
 }
 
-int BFPRT(int array[], int left, int right, const int & k)
+/**
+ * 返回数组 array[left, right] 的第 k 小数的下标
+ */
+int BFPRT(int array[], int left, int right, int k)
 {
-	int pivot_index = GetPivotIndex(array, left, right);            // 得到中位数的中位数下标
-	int divide_index = Partition(array, left, right, pivot_index);  // 进行划分，返回划分边界
-	int num = divide_index - left + 1;
+	int pivot_index = GetPivotIndex(array, left, right); // 得到中位数的中位数下标（即主元下标）
+	int partition_index = Partition(array, left, right, pivot_index); // 进行划分，返回划分边界
+	int num = partition_index - left + 1;
 
 	if (num == k)
-		return divide_index;
+		return partition_index;
 	else if (num > k)
-		return BFPRT(array, left, divide_index - 1, k);
+		return BFPRT(array, left, partition_index - 1, k);
 	else
-		return BFPRT(array, divide_index + 1, right, k - num);
+		return BFPRT(array, partition_index + 1, right, k - num);
 }
 ```
 
@@ -139,7 +159,7 @@ int BFPRT(int array[], int left, int right, const int & k)
 
 ```
 原数组：11 9 10 1 13 8 15 0 16 2 17 5 14 3 6 18 12 7 19 4
-第8小值为：7
+第 8 小值为：7
 变换后的数组：4 0 1 3 2 5 6 7 8 9 10 12 13 14 17 15 16 11 18 19
 ```
 
