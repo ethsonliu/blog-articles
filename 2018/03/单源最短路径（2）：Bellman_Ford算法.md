@@ -46,9 +46,9 @@ using namespace std;
 
 struct Edge
 {
-    int u;
-    int v;
-    int w;
+	int u;
+	int v;
+	int w;
 };
 
 Edge edge[10000]; // 记录所有边
@@ -60,88 +60,104 @@ int  source;      // 源点
 
 bool BellmanFord()
 {
-    // 初始化
-    for (int i = 0; i < vertex_num; i++)
-        dist[i] = (i == source) ? 0 : MAX;
+	// 初始化
+	for (int i = 0; i < vertex_num; i++)
+		dist[i] = (i == source) ? 0 : MAX;
 
-    // n-1 次循环求最短路径
-    for (int i = 1; i <= vertex_num - 1; i++)
-    {
-        for (int j = 0; j < edge_num; j++)
-        {
-            if (dist[edge[j].v] > dist[edge[j].u] + edge[j].w)
-            {
-                dist[edge[j].v] = dist[edge[j].u] + edge[j].w;
-                path[edge[j].v] = edge[j].u;
-            }
-        }
-    }
+	// n-1 次循环求最短路径
+	for (int i = 1; i <= vertex_num - 1; i++)
+	{
+		for (int j = 0; j < edge_num; j++)
+		{
+			if (dist[edge[j].v] > dist[edge[j].u] + edge[j].w)
+			{
+				dist[edge[j].v] = dist[edge[j].u] + edge[j].w;
+				path[edge[j].v] = edge[j].u;
+			}
+		}
+	}
 
-    bool flag = true;  // 标记是否有负权回路
+	bool flag = true;  // 标记是否有负权回路
 
-    // 第 n 次循环判断负权回路
-    for (int i = 0; i < edge_num; i++)
-    {
-        if (dist[edge[i].v] > dist[edge[i].u] + edge[i].w)
-        {
-            flag = false;
-            break;
-        }
-    }
+					   // 第 n 次循环判断负权回路
+	for (int i = 0; i < edge_num; i++)
+	{
+		if (dist[edge[i].v] > dist[edge[i].u] + edge[i].w)
+		{
+			flag = false;
+			break;
+		}
+	}
 
-    return flag;
+	return flag;
 }
 
 void Print()
 {
-    for (int i = 0; i < vertex_num; i++)
-    {
-        if (i != source)
-        {
-            int p = i;
-            stack<int> s;
-            cout << "顶点 " << source << " 到顶点 " << p << " 的最短路径是： ";
-
-            while (source != p)  // 路径顺序是逆向的，所以先保存到栈
-            {
-                s.push(p);
-                p = path[p];
-            }
-
-            cout << source;
-            while (!s.empty())  // 依次从栈中取出的才是正序路径
-            {
-                cout << "--" << s.top();
-                s.pop();
-            }
-            cout << "    最短路径长度是：" << dist[i] << endl;
-        }
-
-    }
+	for (int i = 0; i < vertex_num; i++)
+	{
+		if (i != source)
+		{
+			cout << source << " 到 " << i << " 的最短距离是：" << dist[i] << "，路径是：" << i;
+			int t = path[i];
+			while (t != source)
+			{
+				cout << "--" << t;
+				t = path[t];
+			}
+			cout << "--" << source << endl;
+		}
+	}
 }
 
 int main()
 {
 
-    cout << "请输入图的顶点数，边数，源点：";
-    cin >> vertex_num >> edge_num >> source;
+	cout << "请输入图的顶点数，边数，源点：";
+	cin >> vertex_num >> edge_num >> source;
 
-    cout << "请输入" << edge_num << "条边的信息：\n";
-    for (int i = 0; i < edge_num; i++)
-        cin >> edge[i].u >> edge[i].v >> edge[i].w;
+	cout << "请输入" << edge_num << "条边的信息：\n";
+	for (int i = 0; i < edge_num; i++)
+		cin >> edge[i].u >> edge[i].v >> edge[i].w;
 
-    if (BellmanFord())
-        Print();
-    else
-        cout << "Sorry,it have negative circle!\n";
+	if (BellmanFord())
+		Print();
+	else
+		cout << "存在负权回路!\n";
 
-    return 0;
+	return 0;
 }
 ```
 
-运行截图：
+测试如下：
 
-![](https://subetter.com/images/figures/20180330_06.jpg)
+```
+------------------------------------------ Test 1 ----------------------------------------------
+请输入图的顶点数，边数，源点：5 7 0
+请输入7条边的信息：
+0 1 100
+0 2 30
+0 4 10
+2 1 60
+2 3 60
+3 1 10
+4 3 50
+0 到 1 的最短距离是：70，路径是：1--3--4--0
+0 到 2 的最短距离是：30，路径是：2--0
+0 到 3 的最短距离是：60，路径是：3--4--0
+0 到 4 的最短距离是：10，路径是：4--0
+
+------------------------------------------ Test 2 ----------------------------------------------
+请输入图的顶点数，边数，源点：4 6 0
+请输入6条边的信息：
+0 1 20
+0 2 5
+3 0 -200
+1 3 4
+3 1 4
+2 3 2
+存在负权回路!
+```
 
 
 ## 四：算法优化
