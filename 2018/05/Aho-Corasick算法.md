@@ -223,7 +223,7 @@ int main()
 		cin >> n;
 
 		AC tree;
-		cout << "请输入" << n << "个单词：\n";
+		cout << "请输入 " << n << " 个单词：\n";
 		while (n--)
 		{
 			cin >> s;
@@ -234,7 +234,7 @@ int main()
 		cin >> s;
 
 		tree.build_fail_pointer();
-		cout << "共有" << tree.ac_automaton(s) << "个单词匹配" << endl << endl;
+		cout << "共有 " << tree.ac_automaton(s) << " 个单词匹配" << endl << endl;
 	}
 	return 0;
 }
@@ -244,25 +244,25 @@ int main()
 
 ```
 请输入单词个数：2
-请输入2个单词：
+请输入 2 个单词：
 sher
 he
 请输入搜索文本：sher
-共有2个单词匹配
+共有 2 个单词匹配
 
 请输入单词个数：5
-请输入5个单词：
+请输入 5 个单词：
 she
 he
 say
 shr
 her
 请输入搜索文本：yasherhs
-共有3个单词匹配
+共有 3 个单词匹配
 
 请输入单词个数：1
-请输入1个单词：
+请输入 1 个单词：
 h
 请输入搜索文本：hhhhh
-共有1个单词匹配
+共有 1 个单词匹配
 ```
