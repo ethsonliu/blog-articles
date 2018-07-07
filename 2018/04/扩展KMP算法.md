@@ -136,4 +136,14 @@ int main()
 
 数据测试如下：
 
-![](https://subetter.com/images/figures/20180412_05.png)
+```
+aaaaabbb
+aaaaac
+next:   6 4 3 2 1 0
+extend: 5 4 3 2 1 0 0 0
+
+abc
+def
+next:   3 0 0
+extend: 0 0 0
+```
