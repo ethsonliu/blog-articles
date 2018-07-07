@@ -87,15 +87,25 @@ int main()
     {
         int k = log(j - i + 1.0) / log(2.0);
         int max_ans = max(f[i][k], f[j - (1 << k) + 1][k]);
-        cout << "最大值是： " << max_ans << endl << endl;
+        cout << "最大值是： " << max_ans << endl;
     }
     return 0;
 }
 ```
 
-运行截图如下：
+运行如下：
 
-![](https://subetter.com/images/figures/20180418_02.png)
+```
+数组的下标范围为：0 -- 9，请输入需要查询的区间:
+0 0
+最大值是： 3
+0 1
+最大值是： 3
+0 9
+最大值是： 9
+1 3
+最大值是： 5
+```
 
 ## 四：总结
 
