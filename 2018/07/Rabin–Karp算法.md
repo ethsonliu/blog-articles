@@ -13,7 +13,7 @@ Rabin-Karp算法（也可以叫Karp-Rabin算法），由Richard M. Karp和Michae
 Rabin-Karp算法选用的滚动哈希函数主要是利用[Rabin fingerprint](https://en.wikipedia.org/wiki/Rabin_fingerprint)的思想，举个例子，计算字符串`t[0, m - 1]`的哈希值的公式如下，
 
 $$
-Hash(t[0, m-1])=t[0]*b^{m-1}+t[1]*b^{m-2}+...+t[m-1]*b^0\tag{t[0]代表该字符的ASCII码}
+Hash(t[0, m-1])=t[0]\ast\,b^{m-1}+t[1]\ast\,b^{m-2}+...+t[m-1]\ast\,b^0\tag{t[0]代表该字符的ASCII码}
 $$
 
 其中的$b$是一个常数，在Rabin-Karp算法中，我们一般取值为$256$，因为一个字符的最大值不超过$255$。上面的公式还有一个问题，哈希值如果过大可能会溢出，因此我们还需要对其取模，这个值应该尽可能大，且是质数，这样可以减小哈希碰撞的概率，在这里我们就取$101$。
@@ -21,7 +21,7 @@ $$
 则计算字符串`t[1, m]`的哈希值公式如下，
 
 $$
-Hash(t[1,m])=(Hash(t[0,m-1])-t[0]*b^{m-1})*b+t[m]*b^0\tag{请仔细对比上式}
+Hash(t[1,m])=(Hash(t[0,m-1])-t[0]\ast\,b^{m-1})\ast\,b+t[m]\ast\,b^0\tag{请仔细对比上式}
 $$
 
 完整代码如下，
