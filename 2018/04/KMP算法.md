@@ -168,7 +168,7 @@ void GetNext(string P, int next[])
 	int j = -1;  
 	next[0] = -1;
 
-	while (i < p_len)
+	while (i < p_len - 1)
 	{
 		if (j == -1 || P[i] == P[j])
 		{
@@ -219,7 +219,7 @@ void GetNext(string P, int next[])
 	int j = -1;  
 	next[0] = -1;
 
-	while (i < p_len)
+	while (i < p_len - 1)
 	{
 		if (j == -1 || P[i] == P[j])
 		{
@@ -286,7 +286,7 @@ void GetNextval(string P, int nextval[])
 	int j = -1;  
 	nextval[0] = -1;
 
-	while (i < p_len)
+	while (i < p_len - 1)
 	{
 		if (j == -1 || P[i] == P[j])
 		{
