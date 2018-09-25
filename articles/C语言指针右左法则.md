@@ -1,7 +1,7 @@
 对于一些复杂的声明式，我们往往很难理解它代表的含义，
 
 ```c
-char *(*(**foo[][8])())[]; /* complex and difficult to understand */
+int (*(*(*foo)(int*))[5])(int*); /* complex and difficult to understand */
 ```
 
 “右左法则“是前辈们总结出的一套分析规则，借助它，可以准确快速地分析出上式的具体含义。
@@ -34,7 +34,7 @@ char *(*(**foo[][8])())[]; /* complex and difficult to understand */
 
    foo is ... **char**
 
-3. 中间部分的填充比较复杂，但有一个规律，
+3. 中间部分比较复杂，但有一个规律，
 
    “go right when you can, go left when you must”
 
@@ -50,25 +50,25 @@ long **foo[7];
 
 - **long** \* \* **foo** [7]
 
-  以标识符为开头，以“basic type”为结尾，含义为：
+  以标识符为开头，以“basic type”为结尾，
 
   *foo is ... long*
 
 - ~~long~~ \* \* ~~foo~~ **[7]**
 
-  根据“右左法则”的“go right when you can“，下一步是分析”array of 7“`[7]`，含义为：
+  根据“右左法则”的“go right when you can“，下一步是分析”array of 7...“`[7]`，
 
   *foo is array of 7 ... long*
 
 - ~~long~~ \* **\*** ~~foo [7]~~
 
-  已走到右边的尽头，故“go left when you must”，下一步分析第二个指针符号，含义为：
+  已走到右边的尽头，故“go left when you must”，下一步分析指针符号`*`，
 
   *foo is array of 7 pointer to ... long*
 
 - ~~long~~ **\*** ~~\* foo [7]~~
 
-  继续“go left when you must”，依旧是一个指针，含义为：
+  继续“go left when you must”，依旧是一个指针，
 
   *foo is array of 7 pointer to pointer to long*
 
@@ -84,43 +84,43 @@ int (*(*(*foo)(int*))[5])(int*);
 
 - **int** ( \* ( \* ( \* **foo** ) ( int\* ) ) [5] ) ( int\* )
 
-  以标识符为开头，以“basic type”为结尾，含义为：
+  以标识符为开头，以“basic type”为结尾，
 
   *foo is ... int*
 
 - ~~int~~ ( \* ( \* ( **\*** ~~foo~~ ) ( int\* ) ) [5] ) ( int\* )
 
-  走到括号尾，故“go left when you must”，下一步分析指针符号，含义为：
+  走到括号尾，故“go left when you must”，下一步分析指针符号`*`，
 
   *foo is pointer to ... int*
 
 - ~~int~~ ( \* ( \* ~~( \* foo )~~ **( int\* )** ) [5] ) ( int\* )
 
-  一对括号内的内容分析完，继续“go right when you can“，下一步分析“( int* )”，含义为：
+  一对括号内的内容分析完，继续“go right when you can“，下一步分析`(int*)`，
 
   *foo is pointer to function with parameter 'int\*' returning ... int*
 
 - ~~int~~ ( \* ( **\*** ~~( \* foo ) ( int\* )~~ ) [5] ) ( int\* )
 
-  走到括号尾，故“go left when you must”，下一步分析指针符号，含义为：
+  走到括号尾，故“go left when you must”，下一步分析指针符号`*`，
 
   *foo is pointer to function with parameter 'int\*' returning pointer to ... int*
 
 - ~~int~~ ( \* ~~( \* ( \* foo ) ( int\* ) )~~ **[5]** ) ( int\* )
 
-  此时可以“go right when you can“，下一步分析“[5]”，含义为：
+  此时可以“go right when you can“，下一步分析`[5]`，
 
   *foo is pointer to function with parameter 'int\*' returning pointer to array of 5 ... int*
 
 - ~~int~~ ( **\*** ~~( \* ( \* foo ) ( int\* ) ) [5]~~ ) ( int\* )
 
-  走到括号尾，故“go left when you must”，下一步分析指针符号，含义为：
+  走到括号尾，故“go left when you must”，下一步分析指针符号，
 
   *foo is pointer to function with parameter 'int\*' returning pointer to array of 5 pointer to ... int*
 
 - ~~int ( \* ( \* ( \* foo ) ( int\* ) ) [5] )~~ **( int\* )**
 
-  此时可以“go right when you can“，下一步分析“( int\* )”，含义为：
+  此时可以“go right when you can“，下一步分析`(int*)`，
 
   *foo is pointer to function with parameter 'int\*' returning pointer to array of 5 pointer to function with parameter 'int\*' returning int*
 
@@ -136,30 +136,30 @@ int (*(*(*foo)(int*))[5])(int*);
 int (*(*)())()
 ```
 
-“右左法则”都是从标识符开始分析的，那么问题来了，抽象声明式没有标识符，该从哪里开始？**找到它应该在的位置**。
+“右左法则”都是从标识符开始分析的，那么问题来了，抽象声明式没有标识符，该从哪里开始呢？**找到它应该在的位置**。
 
-我们仔细地观察，会发现，不管是什么声明式，标识符都有下面几条规律：
+我们仔细地观察，会发现，不管是什么声明式，标识符满足下面几条规律：
 
 1. 都在“pointer to”`*`的右边；
 2. 都在“array of”`[]`的左边；
 3. 都在“function returning”`()`的左边；
 4. 都在括号（除了表示“function returning”的括号）里边。
 
-根据这几条规律，我们再来看上面的抽象声明式`int (*(*)())()`，根据规律1和规律3，我们可以锁定大致范围，
+根据这几条规律，我们再来看看上面的抽象声明式。根据规律1和规律3，可以锁定大致范围，
 
 **~~int ( \* ( \*~~ • ) • ~~( ) ) ( )~~**
 
-其中“•”这个点就代表标识符应该在的位置，再根据规律4，最终锁定左边的那个“•”的位置，那么这个抽象声明式我们可以看成这样，
+其中“•”这个点就代表标识符应该在的位置，再根据规律4，最终锁定在左边那个“•”的位置，那么这个抽象声明式我们可以看成这样，
 
 ```c
 int (*(*foo)())()
 ```
 
-这样我们就可以很容易地知道它的含义了，*foo is pointer to function returning pointer to function returning int*。
+如此，我们就可以很容易地知道它的含义了，*foo is pointer to function returning pointer to function returning int*。
 
 ### 六：调用约定（Calling Conventions）
 
-在Windows平台上的Win32编程中，我们经常会碰到一些调用约定符号`__cdecl，__fastcall和__stdcall`等等，
+在Windows平台上的Win32编程中，我们经常会碰到一些调用约定符号`__cdecl，__fastcall`和`__stdcall`等等，
 
 ```c
 extern int __cdecl main(int argc, char **argv);
