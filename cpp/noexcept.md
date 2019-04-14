@@ -3,8 +3,6 @@
 在 C++ 98 中，描述一个函数是否发生异常是这样的，
 
 ```c++
-// in C++ 98
-
 void func_not_throw() throw(); // 保证不会抛出异常
 void func_throw_int() throw(int); // 可能会抛出一个类型为 int 的异常
 void func_throw() throw(...); // 可能会抛出某种类型的异常
@@ -30,7 +28,7 @@ void func_throw() throw(...); // 可能会抛出某种类型的异常
    ```c++
    void func() throw(k_too_small_exception) // 显示指明异常类型
    {
-       int k = 3rd_lib_func(); // 一个第三方库的接口
+       int k = third_party_lib_func(); // 一个第三方库的接口
        if (k < 0)
            throw k_too_small_exception();
    }
@@ -221,9 +219,9 @@ public:
 
 3. **还有那些你可以 100% 保证不会`throw`的函数**
 
-   不要太小瞧`noexcept`，不能保证的地方请不要用，否则会害人害己！切记。
+   请一定要注意，不能保证的地方请不要用，否则会害人害己！切记！
 
-（如果你还是不知道该在哪里用，可以看下准标准库 [Boost](<https://www.boost.org/>) 的源码，全局搜索`BOOST_NOEXCEPT`，你就懂了。）
+（如果你还是不知道该在哪里用，可以看下准标准库 [Boost](https://www.boost.org/) 的源码，全局搜索`BOOST_NOEXCEPT`，你就懂了。）
 
 ## 五：参考链接
 
