@@ -2,7 +2,7 @@ MQTT，全称 Message Queuing Telemetry Transport，中文名“消息队列遥�
 
 ![](https://resource.ethsonliu.com/image/20200424_01.png)
 
-协议的特点总结就是（以下译自 [MQTT Design principles](<https://github.com/mqtt/mqtt.github.io/wiki/Design-Principles>)），
+协议的特点总结就是（以下译自 [MQTT Design principles](https://github.com/mqtt/mqtt.github.io/wiki/Design-Principles)），
 
 1. 精简，但亦提供了健壮的功能模块，易集成，易使用；
 2. 发布/订阅（Publish/Subscribe）模式，方便消息在传感器之间传递，并建立联机关系；
