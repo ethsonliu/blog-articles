@@ -1,4 +1,4 @@
-MQTT，全称 Message Queuing Telemetry Transport，中文名“消息队列遥测传输”，是基于 TCP/IP 的发布 (Publish) / 订阅 (Subscribe) 范式的消息协议，**是为硬件性能低下的远程设备以及网络状况糟糕的情况下而设计的**。它还需要一个消息中间件（相当于服务端），用于处理和转发发布端和订阅端的数据。
+MQTT，全称 Message Queuing Telemetry Transport，中文名 "消息队列遥测传输"，是基于 TCP/IP 的发布 (Publish) / 订阅 (Subscribe) 范式的消息协议，**是为硬件性能低下的远程设备以及网络状况糟糕的情况下而设计的**。它还需要一个消息中间件（相当于服务端），用于处理和转发发布端和订阅端的数据。
 
 ![](https://resource.ethsonliu.com/image/20200424_01.png)
 
