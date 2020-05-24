@@ -1,7 +1,39 @@
-Mosquitto 是 Eclipse 旗下的一个 MQTT 开源库，支持 V3 和 V5，同时提供了一个 C 语言链接库 libmosquitto，用于客户端编程。以下是相关链接：
+Mosquitto 是 Eclipse 旗下的一个 MQTT 开源库，支持 V3 和 V5，同时提供了一个 C 语言链接库 libmosquitto 用于客户端编程，开源地址是 [Github Mosquitto](https://github.com/eclipse/mosquitto)。
 
-- [Eclipse Mosquitto](https://mosquitto.org/)
-- [Github Mosquitto](https://github.com/eclipse/mosquitto)
+## 编译及简单使用
+
+关于 Linux、Arm 和 Windows 上的编译请参考[编译 libmosquitto](https://github.com/EthsonLiu/personal-notes/blob/master/mqtt/编译 libmosquitto.md)，完成后会找到以下几个可执行程序，
+
+- mosquitto，MQTT Broker，也就是 MQTT  Server（以下简称 Broker）
+- mosquitto_passwd，管理上述 mosquitto 密码文件的命令行工具
+- mosquitto_sub，订阅者客户端
+- mosquitto_pub，发布者客户端
+- mosquitto_rr，用于请求/响应消息传递的客户端
+
+现在测试一下客户端和服务端程序。为了测试方便，将客户端和服务端程序都部署在本机，使用 localhost 连接。执行 `mosquitto -v`  启动 Broker ，`-v` 表示打印出运行信息，可以看到默认使用的端口是 1883，
+
+```shell
+ethson@ethson-virtual-machine:/etc/mosquitto$ mosquitto -v
+1590294257: mosquitto version 1.6.9 starting
+1590294257: Using default config.
+1590294257: Opening ipv4 listen socket on port 1883.
+1590294257: Opening ipv6 listen socket on port 1883.
+```
+
+如果系统出现如下问题，就需要添加一个 mosquitto 用户，
+
+```shell
+ethson@ethson-virtual-machine:/etc/mosquitto$ mosquitto -v
+1590294227: Error: Invalid user 'mosquitto'.
+ethson@ethson-virtual-machine:/etc/mosquitto$ useradd mosquitto
+ethson@ethson-virtual-machine:
+```
+
+然后在第二个终端启动订阅者程序：`mosquitto_sub -h localhost -t test -v`，用 `-h` 参数指定服务器 IP，用 `-t` 参数指定订阅的话题。
+
+在第三个终端启动发布者程序：`mosquitto_pub -h localhost -t test -m "Hello world"`，用 `-m` 参数指定要发布的信息内容，然后在订阅者的终端就可以看到由 Broker 推送的信息 "Hello world"，同时在 Broker 的终端也可以看到处理信息的过程。
+
+其它更多的介绍请参照[文档](https://mosquitto.org/)，Mosquitto 提供了丰富的文档说明，请善用文档！
 
 ## 客户端编程
 
@@ -143,14 +175,11 @@ int main()
 }
 ```
 
-注意：Mosquitto 有两种编程模式，单线程和多线程模式，具体参考 [How to disconnect and close the struct mosquitto object safely?](https://github.com/eclipse/mosquitto/issues/1282)。
+更多 API 的介绍请参考 [Mosquitto APIs](https://mosquitto.org/api/files/mosquitto-h.html)，还是那句话，善用文档！
 
-更多 API 的介绍请参考 [Mosquitto APIs](https://mosquitto.org/api/files/mosquitto-h.html)。
-
-## 其它
-
-关于 Linux、Arm 和 Windows 上的编译请参考 [编译 libmosquitto](https://github.com/EthsonLiu/personal-notes/blob/master/mqtt/编译 libmosquitto.md)，关于 Mosquitto 的更多的内容请参考 [MQTT 协议和 mosquitto](https://shaocheng.li/posts/2015/08/11/)。
+注意：Mosquitto 有两种编程模式，单线程和多线程模式。这是我在编程时意外遇到的一个 bug 而发现的，官方的文档并没有说明这一点，可以参见 [How to disconnect and close the struct mosquitto object safely?](https://github.com/eclipse/mosquitto/issues/1282)。
 
 ## 参考
 
 - [基于 MQTT 协议的 Mosquitto 的使用及 libmosquitto 客户端编程](https://blog.csdn.net/dancer__sky/article/details/77855249)
+- [MQTT 协议和 mosquitto](https://shaocheng.li/posts/2015/08/11/)
