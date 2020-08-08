@@ -65,7 +65,8 @@ int Init()
 		s_new[j++] = '#';
 	}
 
-	s_new[j] = '\0';  // 别忘了哦
+	s_new[j++] = '^';  // 别忘了哦
+    s_new[j] = '\0';   // 这是一个好习惯
 	
 	return j;  // 返回 s_new 的长度
 }
@@ -85,10 +86,11 @@ int Manacher()
 		else
 			p[i] = 1;
 
-		while (s_new[i - p[i]] == s_new[i + p[i]])  // 不需边界判断，因为左有'$'，右有'\0'
+		while (s_new[i - p[i]] == s_new[i + p[i]])  // 不需边界判断，因为左有 $，右有 ^
 			p[i]++;
 
-		// 我们每走一步 i，都要和 mx 比较，我们希望 mx 尽可能的远，这样才能更有机会执行 if (i < mx)这句代码，从而提高效率
+		// 我们每走一步 i，都要和 mx 比较，我们希望 mx 尽可能的远，
+        // 这样才能更有机会执行 if (i < mx)这句代码，从而提高效率
 		if (mx < i + p[i])
 		{
 			id = i;
@@ -103,13 +105,29 @@ int Manacher()
 
 int main()
 {
-	while (printf("请输入字符串：\n"))
+	while (printf("请输入字符串："))
 	{
 		scanf("%s", s);
 		printf("最长回文长度为 %d\n\n", Manacher());
 	}
 	return 0;
 }
+```
+
+测试如下：
+
+```plaintext
+请输入字符串：abbahopxpo
+最长回文长度为 5
+
+请输入字符串：a
+最长回文长度为 1
+
+请输入字符串：aa
+最长回文长度为 2
+
+请输入字符串：abax
+最长回文长度为 3
 ```
 
 ## 算法复杂度分析
