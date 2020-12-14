@@ -14,7 +14,7 @@ n-1 次循环，Bellman-Ford 算法就是利用已经找到的最短路径去更
 
 接下来再看看 Bellman-Ford 算法是如何检测负权回路的？
 
-![](https://resource.ethsonliu.com/image/20180331_02.png)
+![](https://cdn.ethsonliu.com/x1/20180331_02.png)
 
 检测的方法很简单，只需在求解最短路径的 n-1 次循环基础上，再进行第 n 次循环：
 
@@ -160,7 +160,7 @@ Bellman-Ford 算法的时间复杂度为 $O(nm)$，其中 n 为顶点数，m 为
 
 大家可以考虑一个随机图（点和边随机生成），除了已确定最短路的顶点与尚未确定最短路的顶点之间的边，其它的边所做的都是无用的，大致描述为下图（分割线以左为已确定最短路的顶点），
 
-![](https://resource.ethsonliu.com/image/20180331_03.png)
+![](https://cdn.ethsonliu.com/x1/20180331_03.png)
 
 其中红色部分为所做无用的边，蓝色部分为实际有用的边。
 
