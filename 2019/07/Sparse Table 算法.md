@@ -44,7 +44,7 @@ void RMQ(int array[], int n)
 
 预处理完成。最后查询操作代码怎么写呢？对于查询区间 $[i,j]$，我们分成两部分，即下图的两个矩形，长度相等，大小等于 $⌊log_2(j-i+1)⌋$。
 
-![](https://resource.ethsonliu.com/image/20190720_01.png)
+![](https://cdn.ethsonliu.com/x1/20190720_01.png)
 
 ## 完整代码
 

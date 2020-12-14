@@ -1,6 +1,6 @@
 MQTT，全称 Message Queuing Telemetry Transport，中文名 "消息队列遥测传输"，是基于 TCP/IP 的发布 (Publish) / 订阅 (Subscribe) 范式的消息协议，**是为硬件性能低下的远程设备以及网络状况糟糕的情况下而设计的**。它还需要一个消息中间件（相当于服务端），用于处理和转发发布端和订阅端的数据。
 
-![](https://resource.ethsonliu.com/image/20200424_01.png)
+![](https://cdn.ethsonliu.com/x1/20200424_01.png)
 
 协议的特点总结就是（以下译自 [MQTT Design principles](https://github.com/mqtt/mqtt.github.io/wiki/Design-Principles)），
 
@@ -37,7 +37,7 @@ MQTT 协议官网：[http://mqtt.org](http://mqtt.org/)，官方 Github 地址�
 
 打开 MQTT.fx，输入服务器地址（broker.hivemq.com）和端口（1883），点击连接，
 
-![](https://resource.ethsonliu.com/image/20200424_02.png)
+![](https://cdn.ethsonliu.com/x1/20200424_02.png)
 
 接着就可以在 MQTT.fx 的 Subscribe 栏输入你要订阅的主题，在 Publish 栏输入相同的主题，并随便填写要发布的消息，你就会在 Subscribe 栏看到刚才发布的消息。注意，因为该服务器是公开的，所以有可能收到别人发布的消息，主要看你的主题是否和别人的重复。
 
@@ -55,7 +55,7 @@ MQTT 协议官网：[http://mqtt.org](http://mqtt.org/)，官方 Github 地址�
 
 主题（Topic）由一个或多个主题层（Topic Levels）组成，每个主题层由一个正斜杠分隔符 "/" 隔开（这个正斜杠我们一般称之为主题层分隔符 Topic Level Separator）。
 
-![](https://resource.ethsonliu.com/image/20200424_03.png)
+![](https://cdn.ethsonliu.com/x1/20200424_03.png)
 
 请注意，每个主题必须至少包含 1 个字符，并且主题字符串允许使用空格。主题区分大小写，例如 myname 和 MyName 是两个不同的主题。此外，主题如果只由一个主题层分隔符 "/" 组成，那么它也是有效的。
 

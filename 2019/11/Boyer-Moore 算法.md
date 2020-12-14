@@ -8,13 +8,13 @@
 
 （1）
 
-![](https://resource.ethsonliu.com/image/20191104_01.png)
+![](https://cdn.ethsonliu.com/x1/20191104_01.png)
 
 假定字符串为 "HERE IS A SIMPLE EXAMPLE"，搜索词为 "EXAMPLE"。
 
 （2）
 
-![](https://resource.ethsonliu.com/image/20191104_02.png)
+![](https://cdn.ethsonliu.com/x1/20191104_02.png)
 
 首先，"字符串" 与 "搜索词" 头部对齐，从尾部开始比较。
 
@@ -24,13 +24,13 @@
 
 （3）
 
-![](https://resource.ethsonliu.com/image/20191104_03.png)
+![](https://cdn.ethsonliu.com/x1/20191104_03.png)
 
 依然从尾部开始比较，发现 "P" 与 "E" 不匹配，所以 "P" 是 "坏字符"。但是，"P" 包含在搜索词 "EXAMPLE" 之中。所以，将搜索词后移两位，两个 "P" 对齐。
 
 （4）
 
-![](https://resource.ethsonliu.com/image/20191104_04.png)
+![](https://cdn.ethsonliu.com/x1/20191104_04.png)
 
 我们由此总结出 **"坏字符规则"：后移位数 = 坏字符的位置 - 搜索词中的上一次出现位置。**
 
@@ -41,25 +41,25 @@
 
 （5）
 
-![](https://resource.ethsonliu.com/image/20191104_05.png)
+![](https://cdn.ethsonliu.com/x1/20191104_05.png)
 
 依然从尾部开始比较，"E" 与 "E" 匹配。
 
 （6）
 
-![](https://resource.ethsonliu.com/image/20191104_06.png)
+![](https://cdn.ethsonliu.com/x1/20191104_06.png)
 
 比较前面一位，"LE" 与 "LE" 匹配。
 
 （7）
 
-![](https://resource.ethsonliu.com/image/20191104_07.png)
+![](https://cdn.ethsonliu.com/x1/20191104_07.png)
 
 比较前面一位，"PLE" 与 "PLE" 匹配。
 
 （8）
 
-![](https://resource.ethsonliu.com/image/20191104_08.png)
+![](https://cdn.ethsonliu.com/x1/20191104_08.png)
 
 比较前面一位，"MPLE" 与 "MPLE" 匹配。**我们把这种情况称为 "好后缀"（good suffix），即所有尾部匹配的字符串。**注意，"MPLE"、"PLE"、"LE"、"E" 都是好后缀。
 
@@ -67,19 +67,19 @@
 
 （9）
 
-![](https://resource.ethsonliu.com/image/20191104_09.png)
+![](https://cdn.ethsonliu.com/x1/20191104_09.png)
 
 比较前一位，发现 "I" 与 "A" 不匹配。所以，"I" 是 "坏字符"。
 
 （10）
 
-![](https://resource.ethsonliu.com/image/20191104_10.png)
+![](https://cdn.ethsonliu.com/x1/20191104_10.png)
 
 根据 "坏字符规则"，此时搜索词应该后移 2 - (-1) = 3 位。问题是，此时有没有更好的移法？
 
 （11）
 
-![](https://resource.ethsonliu.com/image/20191104_11.png)
+![](https://cdn.ethsonliu.com/x1/20191104_11.png)
 
 我们知道，此时存在 "好后缀"。
 
@@ -101,7 +101,7 @@
 
 （12）
 
-![](https://resource.ethsonliu.com/image/20191104_12.png)
+![](https://cdn.ethsonliu.com/x1/20191104_12.png)
 
 可以看到，"坏字符规则" 只能移 3 位，"好后缀规则" 可以移 6 位。所以，Boyer-Moore 算法的基本思想是，每次后移这两个规则之中的较大值。
 
@@ -109,13 +109,13 @@
 
 （13）
 
-![](https://resource.ethsonliu.com/image/20191104_13.png)
+![](https://cdn.ethsonliu.com/x1/20191104_13.png)
 
 继续从尾部开始比较，"P" 与 "E" 不匹配，因此 "P" 是"坏字符"。根据 "坏字符规则"，后移 6 - 4 = 2 位。
 
 （14）
 
-![](https://resource.ethsonliu.com/image/20191104_14.png)
+![](https://cdn.ethsonliu.com/x1/20191104_14.png)
 
 从尾部开始逐位比较，发现全部匹配，于是搜索结束。如果还要继续查找（即找出全部匹配），则根据 "好后缀规则"，后移 6 - 0 = 6 位，即头部的 "E" 移到尾部的 "E" 的位置。
 
@@ -127,13 +127,13 @@
 
 **（1）搜索词中有对应的坏字符时，让搜索词中最靠右的对应字符与坏字符相对。**
 
-![](https://resource.ethsonliu.com/image/20191104_15.png)
+![](https://cdn.ethsonliu.com/x1/20191104_15.png)
 
 第二个 $x$ 即为移动后的位置。
 
 **（2）搜索词中不存在坏字符，那就直接右移整个搜索词长度这么大步数。**
 
-![](https://resource.ethsonliu.com/image/20191104_16.png)
+![](https://cdn.ethsonliu.com/x1/20191104_16.png)
 
 第二个 $x$ 即为移动后的位置。
 
@@ -160,19 +160,19 @@ void GetBC(string & p, int & m, int bc[])
 
 **（1）搜索词中有子串和 "最长好后缀" 完全匹配，则将最靠右的那个完全匹配的子串移动到 "最长好后缀" 的位置继续进行匹配。**
 
-![](https://resource.ethsonliu.com/image/20191104_17.png)
+![](https://cdn.ethsonliu.com/x1/20191104_17.png)
 
 第二个 $x$ 即为移动后的位置。
 
 **（2）如果不存在和 "最长好后缀" 完全匹配的子串，则选取长度最长且也属于前缀的那个 "真好后缀"。**
 
-![](https://resource.ethsonliu.com/image/20191104_18.png)
+![](https://cdn.ethsonliu.com/x1/20191104_18.png)
 
 第二个 $x$ 即为移动后的位置。
 
 **（3）如果完全不存在和 "好后缀" 匹配的子串，则右移整个搜索词。**
 
-![](https://resource.ethsonliu.com/image/20191104_19.png)
+![](https://cdn.ethsonliu.com/x1/20191104_19.png)
 
 第二个 $x$ 即为移动后的位置。
 
@@ -219,7 +219,7 @@ void GetGS(string & p, int & m, int gs[])
 
 那该怎么去求解它呢？
 
-![](https://resource.ethsonliu.com/image/20191104_20.png)
+![](https://cdn.ethsonliu.com/x1/20191104_20.png)
 
 如上图，串 p 的长度为 m，i 是当前正准备计算 `suff[]` 值的那个位置。再设置两个变量，f 和 g。g 代表以 f 为起始位置的字符匹配成功的最左边界，即 "g = 最后一个成功匹配位置 - 1"。
 
@@ -264,13 +264,13 @@ for (int i = m - 2; i >= 0; i--)
 
 第二种情况下，即如果不存在和 "最长好后缀" 完全匹配的子串，则选取长度最长且也属于前缀的那个 "真好后缀"。代码为何这么写？
 
-![](https://resource.ethsonliu.com/image/20191104_21.png)
+![](https://cdn.ethsonliu.com/x1/20191104_21.png)
 
 对于代码 `if (suff[i] == i + 1)`，如上图，两个椭圆的长度都是 `i + 1`，其所表示的字符都对应相等。正如下面浅黑色字所述，若有 `if (suff[i] == i + 1)`，因为下标 0 前面没有字符，故 `[0, (m-1-i)-1]` 这部分的都只能找到 "真好后缀"。
 
 但如果是下面的情况呢？
 
-![](https://resource.ethsonliu.com/image/20191104_22.png)
+![](https://cdn.ethsonliu.com/x1/20191104_22.png)
 
 假设 **[i, m-1]是 "最长好后缀"**，但在整个串中只能找到 "真好后缀" 可以匹配，假设图中的两个椭圆互相匹配。那我们不是可以把区间 [k, s] 移到区间 [j, m-1] 的位置么？事实并非这么简单，我们观察 k-1 和 j-1 这两个位置的字符，它们是不等的，所以这样的移动毫无意义，因此第二种情况，只需利用 `if (suff[i] == i + 1)`就可以找到所有的部分后缀匹配。
 

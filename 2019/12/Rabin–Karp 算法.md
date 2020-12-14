@@ -102,7 +102,7 @@ test is found at index 29
 
 Rabin-Karp 算法主要用来检测文章抄袭，比如 [Semantic Scholar](https://www.semanticscholar.org/) 的检测系统。
 
-![](https://resource.ethsonliu.com/image/20191205_01.png)
+![](https://cdn.ethsonliu.com/x1/20191205_01.png)
 
 但从上面的复杂度数据来看，Rabin-Karp 算法并无多大优势，用于检测文本抄袭可行么？然而从实际使用中反馈的结果表明，检测抄袭的时间复杂度只有 $O(n)$，我觉得主要是因为以下两点，
 

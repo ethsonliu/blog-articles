@@ -28,7 +28,7 @@
 可以看出，`p[i] - 1` 正好是**原字符串中最长回文串的长度**。
 
 接下来的重点就是求解 p 数组，如下图：
-![](https://resource.ethsonliu.com/image/20180403_02.png)
+![](https://cdn.ethsonliu.com/x1/20180403_02.png)
 设置两个变量，mx 和 id 。mx 代表以 id 为中心的最长回文的右边界，也就是 `mx = id + p[id]`。
 
 假设我们现在求 `p[i]`，也就是以 i 为中心的最长回文半径，如果 `i < mx`，如上图，那么：
@@ -137,19 +137,19 @@ int main()
 根据回文的性质，`p[i]` 的值基于以下三种情况得出：
 
 （1）：**j 的回文串有一部分在 id 的之外**，如下图：
-![](https://resource.ethsonliu.com/image/20180403_03.png)
+![](https://cdn.ethsonliu.com/x1/20180403_03.png)
 上图中，黑线为 id 的回文，i 与 j 关于 id 对称，红线为 j 的回文。那么根据代码此时 `p[i] = mx - i`，即紫线。那么 `p[i]` 还可以更大么？答案是不可能！见下图：
-![](https://resource.ethsonliu.com/image/20180403_04.png)
+![](https://cdn.ethsonliu.com/x1/20180403_04.png)
 假设右侧新增的紫色部分是 `p[i]` 可以增加的部分，那么根据回文的性质，a 等于 d ，也就是说 id 的回文不仅仅是黑线，而是黑线+两条紫线，矛盾，所以假设不成立，故 `p[i] = mx - i`，不可以再增加一分。
 
 （2）：**j 回文串全部在 id 的内部**，如下图：
-![](https://resource.ethsonliu.com/image/20180403_05.png)
+![](https://cdn.ethsonliu.com/x1/20180403_05.png)
 根据代码，此时 `p[i] = p[j]`，那么 `p[i]` 还可以更大么？答案亦是不可能！见下图：
-![](https://resource.ethsonliu.com/image/20180403_06.png)
+![](https://cdn.ethsonliu.com/x1/20180403_06.png)
 假设右侧新增的红色部分是 `p[i]` 可以增加的部分，那么根据回文的性质，a 等于 b ，也就是说 j 的回文应该再加上 a 和 b ，矛盾，所以假设不成立，故 `p[i] = p[j]`，也不可以再增加一分。
 
 （3）：**j 回文串左端正好与 id 的回文串左端重合**，见下图：
-![](https://resource.ethsonliu.com/image/20180403_07.png)
+![](https://cdn.ethsonliu.com/x1/20180403_07.png)
 根据代码，此时 `p[i] = p[j]` 或 `p[i] = mx - i`，并且 `p[i]` 还可以继续增加，所以需要
 
 ```c++

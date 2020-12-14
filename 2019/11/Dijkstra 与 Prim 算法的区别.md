@@ -1,6 +1,6 @@
 Dijkstra 算法与 Prim 算法非常相似，甚至很多初学者觉得它们就是一样的。它们最直观的区别就是目的不同：前者求解最短路径，后者求解最小生成树。
 
-![](https://resource.ethsonliu.com/image/20191123_01.png)
+![](https://cdn.ethsonliu.com/x1/20191123_01.png)
 
 
 对比上图，

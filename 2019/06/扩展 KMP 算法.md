@@ -14,7 +14,7 @@
 
 （1）
 
-![](https://resource.ethsonliu.com/image/20190612_01.png)
+![](https://cdn.ethsonliu.com/x1/20190612_01.png)
 
 如上图，假设当前遍历到 S 串位置 i，即 `extend[0]...extend[i - 1]`这 i 个位置的值已经计算得到。设置两个变量，a 和 p。p 代表以 a 为起始位置的字符匹配成功的最右边界，也就是 "p = 最后一个匹配成功位置 + 1"。相较于字符串 T 得出，**S[a...p) 等于 T[0...p-a)**。
 
@@ -27,19 +27,19 @@
 
 （2）
 
-![](https://resource.ethsonliu.com/image/20190612_02.png)
+![](https://cdn.ethsonliu.com/x1/20190612_02.png)
 
 `S[i]` 对应 `T[i - a]`，如果 `i + next[i - a] < p`，如上图，三个椭圆长度相同，根据 next 数组的定义，此时 `extend[i] = next[i - a]`。
 
 （3）
 
-![](https://resource.ethsonliu.com/image/20190612_03.png)
+![](https://cdn.ethsonliu.com/x1/20190612_03.png)
 
 如果 `i + next[i - a] == p` 呢？如上图，三个椭圆都是完全相同的，`S[p] != T[p - a]` 且 `T[p - i] != T[p - a]`，但 `S[p]` 有可能等于 `T[p - i]`，所以我们可以直接从 `S[p]` 与 `T[p - i]` 开始往后匹配，加快了速度。
 
 （4）
 
-![](https://resource.ethsonliu.com/image/20190612_04.png)
+![](https://cdn.ethsonliu.com/x1/20190612_04.png)
 
 如果 `i + next[i - a] > p` 呢？那说明 `S[i...p)` 与 `T[i-a...p-a)` 相同，注意到 `S[p] != T[p - a]` 且 `T[p - i]  == T[p - a]`，也就是说 `S[p] != T[p - i]`，所以就没有继续往下判断的必要了，我们可以直接将 `extend[i]` 赋值为 `p - i`。
 

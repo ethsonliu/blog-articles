@@ -2,7 +2,7 @@ AVL 树是一棵平衡的[二叉查找树](https://ethsonliu.com/2019/09/binary-
 
 所谓的平衡之意，就是树中任意一个结点下左右两个子树的高度差不超过 1。（本文对于树的高度约定为：空结点高度是 0，叶子结点高度是 1。）
 
-![](https://resource.ethsonliu.com/image/20191112_01.png)
+![](https://cdn.ethsonliu.com/x1/20191112_01.png)
 
 那 AVL 树和普通的二叉查找树有何区别呢？如图，如果我们插入的是一组有序上升或下降的数据，则一棵普通的二叉查找树必然会退化成一个单链表，其查找效率就降为 $O(n)$。而 AVL 树因其平衡的限制，可以始终保持 $O(logn)$ 的时间复杂度。
 
@@ -16,7 +16,7 @@ AVL 树是一棵平衡的[二叉查找树](https://ethsonliu.com/2019/09/binary-
 
 **1. 左左失衡**
 
-![](https://resource.ethsonliu.com/image/20191112_02.png)
+![](https://cdn.ethsonliu.com/x1/20191112_02.png)
 
 所谓的左左，即 "失衡结点" 的左子树比右子树高 2，左孩子（即 x）下的左子树比右子树高 1。
 
@@ -38,7 +38,7 @@ Node * AVL::ll_rotate(Node * y)
 
 **2. 右右失衡**
 
-![](https://resource.ethsonliu.com/image/20191112_03.png)
+![](https://cdn.ethsonliu.com/x1/20191112_03.png)
 
 所谓的右右，即 "失衡结点" 的右子树比左子树高 2，右孩子（即 x）下的右子树比左子树高 1。
 
@@ -60,7 +60,7 @@ Node * AVL::rr_rotate(Node * y)
 
 **3. 左右失衡**
 
-![](https://resource.ethsonliu.com/image/20191112_04.png)
+![](https://cdn.ethsonliu.com/x1/20191112_04.png)
 
 所谓的左右，即 "失衡结点" 的左子树比右子树高 2，左孩子（即 x）下的右子树比左子树高 1。
 
@@ -77,7 +77,7 @@ Node * AVL::lr_rotate(Node * y)
 
 **4. 右左失衡**
 
-![](https://resource.ethsonliu.com/image/20191112_05.png)
+![](https://cdn.ethsonliu.com/x1/20191112_05.png)
 
 所谓的右左，即 "失衡结点" 的右子树比左子树高 2，右孩子（即 x）下的左子树比右子树高 1。
 
@@ -538,7 +538,7 @@ int main()
 
 起初构造的 AVL 树为下图：
 
-![](https://resource.ethsonliu.com/image/20191112_07.png)
+![](https://cdn.ethsonliu.com/x1/20191112_07.png)
 
 ## 总结
 
@@ -548,7 +548,7 @@ int main()
 
 删除操作中，若存在失衡，则**至少**需要一次恢复平衡操作，递归回溯的量级亦为 $O(logn)$。与插入操作不同，当对第一个失衡结点恢复平衡后，它的父亲或者是它的祖先们也可能是非平衡的（见下图，删除 1），所以删除操作的回溯很有必要。
 
-![](https://resource.ethsonliu.com/image/20191112_01.png)
+![](https://cdn.ethsonliu.com/x1/20191112_01.png)
 
 ## 参考
 
