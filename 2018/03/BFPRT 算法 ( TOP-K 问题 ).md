@@ -30,7 +30,7 @@ BFPRT 算法步骤如下：
 
 上面的描述可能并不易理解，先看下面这幅图：
 
-![](https://resource.ethsonliu.com/image/20180325_01.png)
+![](https://cdn.ethsonliu.com/x1/20180325_01.png)
 
 BFPRT() 调用 GetPivotIndex() 和 Partition() 来求解第 k 小，在这过程中，GetPivotIndex() 也调用了 BFPRT()，即 GetPivotIndex() 和 BFPRT() 为互递归的关系。
 
