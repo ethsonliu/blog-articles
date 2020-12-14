@@ -4,7 +4,7 @@ Knuth-Morris-Pratt 算法（简称 KMP）是解决这一问题的常用算法之
 
 在继续下面的内容之前，有必要在这里介绍下两个概念：**真前缀** 和 **真后缀**。
 
-![](https://resource.ethsonliu.com/image/20180404_01.png)
+![](https://cdn.ethsonliu.com/x1/20180404_01.png)
 
 由上图所得， "真前缀" 指除了自身以外，一个字符串的全部头部组合；"真后缀" 指除了自身以外，一个字符串的全部尾部组合。（网上很多博客，应该说是几乎所有的博客，都是 "前缀"。严格来说，"真前缀" 和 "前缀" 是不同的，既然不同，还是不要混为一谈的好！）
 
@@ -52,43 +52,43 @@ int NaiveStringSearch(string S, string P)
 
 （1）
 
-![](https://resource.ethsonliu.com/image/20180404_02.png)
+![](https://cdn.ethsonliu.com/x1/20180404_02.png)
 
 首先，主串 "BBC ABCDAB ABCDABCDABDE" 的第一个字符与模式串 "ABCDABD" 的第一个字符，进行比较。因为 B 与 A 不匹配，所以模式串后移一位。
 
 （2）
 
-![](https://resource.ethsonliu.com/image/20180404_03.png)
+![](https://cdn.ethsonliu.com/x1/20180404_03.png)
 
 因为 B 与 A 又不匹配，模式串再往后移。
 
 （3）
 
-![](https://resource.ethsonliu.com/image/20180404_04.png)
+![](https://cdn.ethsonliu.com/x1/20180404_04.png)
 
 就这样，直到主串有一个字符，与模式串的第一个字符相同为止。
 
 （4）
 
-![](https://resource.ethsonliu.com/image/20180404_05.png)
+![](https://cdn.ethsonliu.com/x1/20180404_05.png)
 
 接着比较主串和模式串的下一个字符，还是相同。
 
 （5）
 
-![](https://resource.ethsonliu.com/image/20180404_06.png)
+![](https://cdn.ethsonliu.com/x1/20180404_06.png)
 
 直到主串有一个字符，与模式串对应的字符不相同为止。
 
 （6）
 
-![](https://resource.ethsonliu.com/image/20180404_07.png)
+![](https://cdn.ethsonliu.com/x1/20180404_07.png)
 
 这时，最自然的反应是，将模式串整个后移一位，再从头逐个比较。这样做虽然可行，但是效率很差，因为你要把"搜索位置"移到已经比较过的位置，重比一遍。
 
 （7）
 
-![](https://resource.ethsonliu.com/image/20180404_08.png)
+![](https://cdn.ethsonliu.com/x1/20180404_08.png)
 
 一个基本事实是，当空格与 D 不匹配时，你其实是已经知道前面六个字符是 "ABCDAB"。KMP 算法的想法是，设法利用这个已知信息，不要把"搜索位置"移回已经比较过的位置，而是继续把它向后移，这样就提高了效率。
 
@@ -103,31 +103,31 @@ int NaiveStringSearch(string S, string P)
 
 （9）
 
-![](https://resource.ethsonliu.com/image/20180404_09.png)
+![](https://cdn.ethsonliu.com/x1/20180404_09.png)
 
 已知空格与 D 不匹配时，前面六个字符 "ABCDAB" 是匹配的。根据跳转数组可知，不匹配处 D 的 next 值为 2，因此接下来**从模式串下标为 2 的位置开始匹配**。
 
 （10）
 
-![](https://resource.ethsonliu.com/image/20180404_10.png)
+![](https://cdn.ethsonliu.com/x1/20180404_10.png)
 
 因为空格与 Ｃ 不匹配，C 处的 next 值为 0，因此接下来模式串从下标为 0 处开始匹配。
 
 （11）
 
-![](https://resource.ethsonliu.com/image/20180404_11.png)
+![](https://cdn.ethsonliu.com/x1/20180404_11.png)
 
 因为空格与 A 不匹配，此处 next 值为 -1，表示模式串的第一个字符就不匹配，那么直接往后移一位。
 
 （12）
 
-![](https://resource.ethsonliu.com/image/20180404_12.png)
+![](https://cdn.ethsonliu.com/x1/20180404_12.png)
 
 逐位比较，直到发现 C 与 D 不匹配。于是，下一步从下标为 2 的地方开始匹配。
 
 （13）
 
-![](https://resource.ethsonliu.com/image/20180404_13.png)
+![](https://cdn.ethsonliu.com/x1/20180404_13.png)
 
 逐位比较，直到模式串的最后一位，发现完全匹配，于是搜索完成。
 
@@ -188,13 +188,13 @@ i 和 j 就像是两个”指针“，一前一后，通过移动它们来找到
 
 **（2）：if...else...语句里做了什么？**
 
-![](https://resource.ethsonliu.com/image/20180404_14.png)
+![](https://cdn.ethsonliu.com/x1/20180404_14.png)
 
 假设 i 和 j 的位置如上图，由 `next[i] = j` 得，也就是对于位置 i 来说，**区段 [0, i - 1] 的最长相同真前后缀分别是 [0, j - 1] 和 [i - j, i - 1]，即这两区段内容相同**。
 
 按照算法流程，`if (P[i] == P[j])`，则 `i++; j++; next[i] = j;`；若不等，则 `j = next[j]`，见下图：
 
-![](https://resource.ethsonliu.com/image/20180404_15.png)
+![](https://cdn.ethsonliu.com/x1/20180404_15.png)
 
 `next[j]` 代表 [0, j - 1] 区段中最长相同真前后缀的长度。如图，用左侧两个椭圆来表示这个最长相同真前后缀，即这两个椭圆代表的区段内容相同；同理，右侧也有相同的两个椭圆。所以 else 语句就是利用第一个椭圆和第四个椭圆内容相同来加快得到 [0, i - 1] 区段的相同真前后缀的长度。
 
