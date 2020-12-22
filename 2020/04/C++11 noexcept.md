@@ -1,14 +1,22 @@
-## C++98 中的异常描述符
+## C++98 中的异常规范（Exception Specification）
 
-在 C++98 中，描述一个函数是否发生异常是这样的，
+在 C++98 中，描述一个函数是否发生异常有以下几种方式，
 
 ```c++
-void func_not_throw() throw(); // 保证不会抛出异常
-void func_throw_int() throw(int); // 可能会抛出一个类型为 int 的异常
-void func_throw() throw(...); // 可能会抛出某种类型的异常
+void func_no_throw() throw();
+void func_throw_int() throw(int);
+void func_throw() throw(...);
 ```
 
-但它有几个弊端：
+`throw()` 用以说明该函数不抛异常。但如果由于程序员的疏忽，这个函数还是抛出了异常，那么程序会直接调用 [std::unexpected](http://www.cplusplus.com/reference/exception/unexpected/)，哪怕你有在外层使用 `try...catch...`。
+
+`throw(int)` 用以说明该函数如果抛出异常，只能是一个 int 类型的。但如果由于程序员的疏忽，这个函数抛出了另一个类型的异常（比如 double），那么程序会直接调用 std::unexpected，哪怕你也有在外层使用 `try...catch...`。如果一个函数可能会抛出 int、double 两种类型的异常，那么也可以写成 `throw(int, double)`。
+
+`throw(...)` 用以说明该函数可能会抛出一个未知类型的异常。
+
+C++11 已经摒弃了 throw 异常说明符（Exception Specifier），并以一个新的说明符 noexcept 代替。不过目前的标准库实现（GCC、MSVC）似乎还是支持的，所以你依然可以继续使用。但不建议这么做，毕竟标准去摒弃它，自然有它的理由。而且，为了你的程序可移植性，也不应该去使用它。
+
+那为什么要摒弃呢？因为它有以下几个弊端：
 
 1. **模板函数无法使用**
 
@@ -46,14 +54,14 @@ void func_throw() throw(...); // 可能会抛出某种类型的异常
    }
    ```
 
-   在 C++ 98 中，它会在调用处进行栈展开（Stack Unwinding）操作，但从函数的声明来看，程序员可能并不会对它进行 `try...catch...` 异常处理，所以经过一帧帧的栈展开（Stack Unwinding）后，程序最终还是会终止，但不必要的栈展开（Stack Unwinding）还是做了。
+   在 C++ 98 中，它会在调用处进行栈展开（Stack Unwinding）操作，但从函数的声明来看，程序员可能并不会对它进行 `try...catch...` 异常处理，所以经过一帧帧的栈展开后，程序最终还是会终止，但不必要的栈展开还是做了。
 
 其它更多的，可以参考：
 
 - [https://stackoverflow.com/questions/88573/should-i-use-an-exception-specifier-in-c](<https://stackoverflow.com/questions/88573/should-i-use-an-exception-specifier-in-c>)
 - [http://c.biancheng.net/cpp/biancheng/view/3027.html](http://c.biancheng.net/cpp/biancheng/view/3027.html)
 
-最终你会发现，使用 throw 异常说明符（Exception Specification），时常会感到它的鸡肋、啰嗦和麻烦。因此 C++11 摒弃了 throw 异常说明符（Exception Specification），并以一个新的说明符 noexcept 代替。
+最终你会发现，使用 throw 异常说明符（Exception Specification），时常会感到它的鸡肋、啰嗦和麻烦。因此 C++11 摒弃了 throw 异常说明符（Exception Specification），
 
 ## C++ 11 noexcept
 
