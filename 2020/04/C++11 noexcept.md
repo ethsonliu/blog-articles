@@ -1,26 +1,26 @@
 ## C++98 中的异常规范（Exception Specification）
 
-throw 关键字除了可以用在函数体中抛出异常，还可以用在函数头和函数体之间，指明当前函数能够抛出的异常类型，这称为异常规范（Exception pecification），有些教程也称为异常指示符或异常列表。请看下面的例子：
+throw 关键字除了可以用在函数体中抛出异常，还可以用在函数头和函数体之间，指明当前函数能够抛出的异常类型，这称为异常规范，有些教程也称为异常指示符或异常列表。请看下面的例子：
 
 ```c++
-double func (char param) throw(int);
+double func1 (char param) throw(int);
 ```
 
-函数 func 只能抛出 int 类型的异常。如果抛出其他类型的异常，try 将无法捕获，并直接调用 [std::unexpected](http://www.cplusplus.com/reference/exception/unexpected/)。
+函数 func1 只能抛出 int 类型的异常。如果抛出其他类型的异常，try 将无法捕获，并直接调用 [std::unexpected](http://www.cplusplus.com/reference/exception/unexpected/)。
 
 如果函数会抛出多种类型的异常，那么可以用逗号隔开，
 
 ```c++
-double func (char param) throw(int, char, exception);
+double func2 (char param) throw(int, char, exception);
 ```
 
 如果函数不会抛出任何异常，那么只需写一个空括号即可，
 
 ```c++
-double func (char param) throw();
+double func3 (char param) throw();
 ```
 
-同样的，如果函数 func 还是抛出异常了，try 也会检测不到，并且也会直接调用 [std::unexpected](http://www.cplusplus.com/reference/exception/unexpected/)。
+同样的，如果函数 func3 还是抛出异常了，try 也会检测不到，并且也会直接调用 [std::unexpected](http://www.cplusplus.com/reference/exception/unexpected/)。
 
 ### 虚函数中的异常规范
 
@@ -62,15 +62,6 @@ void func3() throw(float, char*);
 void func3() throw(float, char*) { }
 ```
 
-在 C++98 中，描述一个函数是否发生异常有以下几种方式，
-
-```c++
-void func_normal();
-void func_no_throw() throw();
-void func_throw_int() throw(int);
-void func_throw() throw(...);
-```
-
 ### 异常规范在 C++11 中被摒弃
 
 异常规范的初衷是好的，它希望让程序员看到函数的定义或声明后，立马就知道该函数会抛出什么类型的异常，这样程序员就可以使用 try-catch 来捕获了。如果没有异常规范，程序员必须阅读函数源码才能知道函数会抛出什么异常。
@@ -90,7 +81,7 @@ void func_throw() throw(...);
          x.do_something();
     }
     ```
-    赋值函数、拷贝构造函数和 do_something() 都有可能抛出异常，这取决于类型 T 的实现，所以无法给函数 func 指定。 
+    赋值函数、拷贝构造函数和 do_something() 都有可能抛出异常，这取决于类型 T 的实现，所以无法给函数 func 指定异常类型。 
 4. 实际使用中，我们只需要两种异常说明：抛异常和不抛异常，也就是 throw(...) 和 throw()。
 
 所以 C++11 摒弃了 throw 异常规范，而引入了新的异常说明符 noexcept。
@@ -124,7 +115,7 @@ void func_not_throw() noexcept
 }
 ```
 
-这会发生什么呢？程序会直接调用 `std::terminate`，并且不会栈展开（也可能会调用或部分调用，取决于编译器的实现）。另外，即使你有使用 `try...catch...`，也无法捕获这个异常。
+这会发生什么呢？程序会直接调用 [std::terminate(https://en.cppreference.com/w/cpp/error/terminate)，并且不会栈展开（也可能会调用或部分调用，取决于编译器的实现）。另外，即使你有使用 `try...catch...`，也无法捕获这个异常。
 
 ```c++
 #include <iostream>
