@@ -79,9 +79,23 @@ void func_throw() throw(...);
 
 其实，不仅仅如此，
 
+1. 异常规范的检查是在运行期而不是编译期，因此程序员不能保证所有异常都得到了 catch 处理。
+2. 由于第一点的存在，编译器需要生成额外的代码，在一定程度上妨碍了优化。
+3. 模板函数中无法使用。比如下面的代码，
+    ```c++
+    template<class T>
+    void func(T k)
+    {
+         T x(k);
+         x.do_something();
+    }
+    ```
+    赋值函数、拷贝构造函数和 do_something() 都有可能抛出异常，这取决于类型 T 的实现，所以无法给函数 func 指定。 
+4. 实际使用中，我们只需要两种异常说明：抛异常和不抛异常，也就是 throw(...) 和 throw()。
 
+所以 C++11 摒弃了 throw 异常规范，而引入了新的异常说明符 noexcept。
 
-## C++ 11 noexcept
+## C++11 noexcept
 
 noexcept 紧跟在函数的参数列表后面，它只用来表明两种状态："不抛异常" 和 "抛异常"。
 
@@ -244,7 +258,7 @@ public:
 
    尽量让上面的函数都是 noexcept。
 
-3. **还有那些你可以 100% 保证不会 throw 的函数**
+3. **还有那些你可以 100% 保证不会 throw 的函数，比如**
 
    请一定要注意，不能保证的地方请不要用，否则会害人害己！切记！
 
@@ -255,7 +269,7 @@ public:
 - [C++ throw 关键字（抛出异常+异常规范）](http://c.biancheng.net/cpp/biancheng/view/3027.html)
 - [Deprecated throw-list in C++11](https://stackoverflow.com/questions/13841559/deprecated-throw-list-in-c11)
 - [Exceptions](http://www.cplusplus.com/doc/tutorial/exceptions/)
-- QuasarDB. [When noexcept?](https://blog.quasardb.net/2016/12/12/when-noexcept-2)
-- StackOverflow. [Why does reallocating a vector copy instead of moving the elements? ](https://stackoverflow.com/questions/10127603/why-does-reallocating-a-vector-copy-instead-of-moving-the-elements)
-- StackOverflow. [When should I really use noexcept?](https://stackoverflow.com/questions/10787766/when-should-i-really-use-noexcept)
+- [When noexcept?](https://blog.quasardb.net/2016/12/12/when-noexcept-2)
+- [Why does reallocating a vector copy instead of moving the elements? ](https://stackoverflow.com/questions/10127603/why-does-reallocating-a-vector-copy-instead-of-moving-the-elements)
+- [When should I really use noexcept?](https://stackoverflow.com/questions/10787766/when-should-i-really-use-noexcept)
 - [Rvalue References and Exception Safety](http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2009/n2855.html)
