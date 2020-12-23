@@ -10,7 +10,7 @@ void func_throw() throw(...);
 
 `throw()` 用以说明该函数不抛异常。但如果由于程序员的疏忽，这个函数还是抛出了异常，那么程序会直接调用 [std::unexpected](http://www.cplusplus.com/reference/exception/unexpected/)，哪怕你有在外层使用 `try...catch...`。
 
-`throw(int)` 用以说明该函数如果抛出异常，只能是一个 int 类型的。但如果由于程序员的疏忽，这个函数抛出了另一个类型的异常（比如 double），那么程序会直接调用 std::unexpected，哪怕你也有在外层使用 `try...catch...`。如果一个函数可能会抛出 int、double 两种类型的异常，那么也可以写成 `throw(int, double)`。
+`throw(int)` 用以说明该函数如果抛出异常，只能是 int 类型。但如果由于程序员的疏忽，这个函数抛出了另一个类型的异常（比如 double），那么程序会直接调用 std::unexpected，哪怕你也有在外层使用 `try...catch...`。你也可以写成 `throw(int, double)`，这用来说明函数只能抛出 int 或 double 类型的异常。
 
 `throw(...)` 用以说明该函数可能会抛出一个未知类型的异常。当然，用这个来代替上面的 `throw(int, double)` 也是可以的，而且也方便以后的重构（比如又新加入了其它类型的异常）。
 
