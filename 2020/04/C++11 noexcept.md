@@ -3,6 +3,7 @@
 在 C++98 中，描述一个函数是否发生异常有以下几种方式，
 
 ```c++
+void func_normal();
 void func_no_throw() throw();
 void func_throw_int() throw(int);
 void func_throw() throw(...);
@@ -58,7 +59,6 @@ C++11 已经摒弃了 throw 异常说明符，并以一个新的说明符 noexce
 
 其它更多的，可以参考：
 
-- [https://stackoverflow.com/questions/88573/should-i-use-an-exception-specifier-in-c](<https://stackoverflow.com/questions/88573/should-i-use-an-exception-specifier-in-c>)
 - [http://c.biancheng.net/cpp/biancheng/view/3027.html](http://c.biancheng.net/cpp/biancheng/view/3027.html)
 
 最终你会发现，使用 throw 异常说明符（Exception Specification），时常会感到它的鸡肋、啰嗦和麻烦。因此 C++11 摒弃了 throw 异常说明符（Exception Specification），
@@ -234,6 +234,9 @@ public:
 
 ## 参考
 
+- [C++ throw 关键字（抛出异常+异常规范）](http://c.biancheng.net/cpp/biancheng/view/3027.html)
+- [Deprecated throw-list in C++11](https://stackoverflow.com/questions/13841559/deprecated-throw-list-in-c11)
+- [Exceptions](http://www.cplusplus.com/doc/tutorial/exceptions/)
 - QuasarDB. [When noexcept?](https://blog.quasardb.net/2016/12/12/when-noexcept-2)
 - StackOverflow. [Why does reallocating a vector copy instead of moving the elements? ](https://stackoverflow.com/questions/10127603/why-does-reallocating-a-vector-copy-instead-of-moving-the-elements)
 - StackOverflow. [When should I really use noexcept?](https://stackoverflow.com/questions/10787766/when-should-i-really-use-noexcept)
