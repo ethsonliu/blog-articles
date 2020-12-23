@@ -248,7 +248,10 @@ public:
 
    你可能会问，为什么在移动构造函数是 noexcept 时才能使用？这是因为它执行的是 Strong Exception Guarantee，发生异常时需要还原，也就是说，你调用它之前是什么样，抛出异常后，你就得恢复成啥样。但对于移动构造函数发生异常，是很难恢复回去的，如果在恢复移动（move）的时候发生异常了呢？但复制构造函数就不同了，它发生异常直接调用它的析构函数就行了。
 
-## 怎么用，什么时候用？
+## 使用建议
+
+你说编写的函数**默认都不使用**，只有遇到以下的情况你再思考是否需要使用，
+
 
 1. **析构函数**
 
@@ -256,19 +259,18 @@ public:
 
 2. **构造函数（普通、复制、移动），赋值运算符重载函数**
 
-   尽量让上面的函数都是 noexcept。
+   尽量让上面的函数都是 noexcept，这可能会给你的代码带来一定的运行期执行效率。
 
-3. **还有那些你可以 100% 保证不会 throw 的函数，比如**
+3. **还有那些你可以 100% 保证不会 throw 的函数**
 
-   请一定要注意，不能保证的地方请不要用，否则会害人害己！切记！
-
-如果你还是不知道该在哪里用，可以看下准标准库 [Boost](https://www.boost.org/) 的源码，全局搜索 `BOOST_NOEXCEPT`，你就大概明白了。但据我所知，大多数人都在进行上层开发（也就是调个库用用而已），noexcept 是一个很交智商税的关键词，所以我个人在开发时一概不用。
+   比如像是 int，pointer 这类的 getter，setter 都可以用 noexcept。因为不可能出错。但请一定要注意，不能保证的地方请不要用，否则会害人害己！切记！如果你还是不知道该在哪里用，可以看下准标准库 [Boost](https://www.boost.org/) 的源码，全局搜索 `BOOST_NOEXCEPT`，你就大概明白了。
 
 ## 参考
 
 - [C++ throw 关键字（抛出异常+异常规范）](http://c.biancheng.net/cpp/biancheng/view/3027.html)
 - [Deprecated throw-list in C++11](https://stackoverflow.com/questions/13841559/deprecated-throw-list-in-c11)
 - [Exceptions](http://www.cplusplus.com/doc/tutorial/exceptions/)
+- [C++11的noexcept标识符与操作符应如何正确使用？](https://www.zhihu.com/question/30950837)
 - [When noexcept?](https://blog.quasardb.net/2016/12/12/when-noexcept-2)
 - [Why does reallocating a vector copy instead of moving the elements? ](https://stackoverflow.com/questions/10127603/why-does-reallocating-a-vector-copy-instead-of-moving-the-elements)
 - [When should I really use noexcept?](https://stackoverflow.com/questions/10787766/when-should-i-really-use-noexcept)
