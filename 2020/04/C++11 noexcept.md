@@ -1,5 +1,67 @@
 ## C++98 中的异常规范（Exception Specification）
 
+throw 关键字除了可以用在函数体中抛出异常，还可以用在函数头和函数体之间，指明当前函数能够抛出的异常类型，这称为异常规范（Exception pecification），有些教程也称为异常指示符或异常列表。请看下面的例子：
+
+```c++
+double func (char param) throw(int);
+```
+
+函数 func 只能抛出 int 类型的异常。如果抛出其他类型的异常，try 将无法捕获，并直接调用 [std::unexpected](http://www.cplusplus.com/reference/exception/unexpected/)。
+
+如果函数会抛出多种类型的异常，那么可以用逗号隔开，
+
+```c++
+double func (char param) throw(int, char, exception);
+```
+
+如果函数不会抛出任何异常，那么只需写一个空括号即可，
+
+```c++
+double func (char param) throw();
+```
+
+同样的，如果函数 func 还是抛出异常了，try 也会检测不到，并且也会直接调用 [std::unexpected](http://www.cplusplus.com/reference/exception/unexpected/)。
+
+### 虚函数中的异常规范
+
+C++ 规定，派生类虚函数的异常规范必须与基类虚函数的异常规范一样严格，或者更严格。只有这样，当通过基类指针（或者引用）调用派生类虚函数时，才能保证不违背基类成员函数的异常规范。请看下面的例子：
+
+```c++
+class Base
+{
+public:
+    virtual int fun1(int) throw();
+    virtual int fun2(int) throw(int);
+    virtual string fun3() throw(int, string);
+};
+
+class Derived: public Base
+{
+public:
+    int fun1(int) throw(int);    //错！异常规范不如 throw() 严格
+    int fun2(int) throw(int);    //对！有相同的异常规范
+    string fun3() throw(string); //对！异常规范比 throw(int, string) 更严格
+}
+```
+
+### 异常规范与函数定义和函数声明
+
+C++ 规定，异常规范在函数声明和函数定义中必须同时指明，并且要严格保持一致，不能更加严格或者更加宽松。请看下面的几组函数：
+
+```c++
+// 错！定义中有异常规范，声明中没有
+void func1();
+void func1() throw(int) { }
+
+// 错！定义和声明中的异常规范不一致
+void func2() throw(int);
+void func2() throw(int, bool) { }
+
+// 对！定义和声明中的异常规范严格一致
+void func3() throw(float, char*);
+void func3() throw(float, char*) { }
+```
+
 在 C++98 中，描述一个函数是否发生异常有以下几种方式，
 
 ```c++
@@ -9,59 +71,15 @@ void func_throw_int() throw(int);
 void func_throw() throw(...);
 ```
 
-`throw()` 用以说明该函数不抛异常。但如果由于程序员的疏忽，这个函数还是抛出了异常，那么程序会直接调用 [std::unexpected](http://www.cplusplus.com/reference/exception/unexpected/)，哪怕你有在外层使用 `try...catch...`。
+### 异常规范在 C++11 中被摒弃
 
-`throw(int)` 用以说明该函数如果抛出异常，只能是 int 类型。但如果由于程序员的疏忽，这个函数抛出了另一个类型的异常（比如 double），那么程序会直接调用 std::unexpected，哪怕你也有在外层使用 `try...catch...`。你也可以写成 `throw(int, double)`，这用来说明函数只能抛出 int 或 double 类型的异常。
+异常规范的初衷是好的，它希望让程序员看到函数的定义或声明后，立马就知道该函数会抛出什么类型的异常，这样程序员就可以使用 try-catch 来捕获了。如果没有异常规范，程序员必须阅读函数源码才能知道函数会抛出什么异常。
 
-`throw(...)` 用以说明该函数可能会抛出一个未知类型的异常。当然，用这个来代替上面的 `throw(int, double)` 也是可以的，而且也方便以后的重构（比如又新加入了其它类型的异常）。
+不过这有时候也不容易做到。例如，func_outer() 函数可能不会引发异常，但它调用了另外一个函数 func_inner()，这个函数可能会引发异常。再如，编写的一个函数调用了老式的一个库函数，此时不会引发异常，但是老式库更新以后这个函数却引发了异常。
 
-C++11 已经摒弃了 throw 异常说明符，并以一个新的说明符 noexcept 代替。不过目前的标准库实现（GCC、MSVC）似乎还是支持的，所以你依然可以继续使用。但不建议这么做，毕竟标准去摒弃它，自然有它的理由。而且，为了你的程序可移植性，也不应该去使用它。
+其实，不仅仅如此，
 
-那为什么要摒弃呢？因为它有以下几个弊端：
 
-1. **模板函数无法使用**
-
-   ```c++
-   template<class T>
-   void simple_func(T k)
-   {
-        T x(k);
-        x.do_something();
-   }
-   ```
-
-   赋值函数、拷贝构造函数和 `do_something()` 都有可能抛出异常，这取决于 T 的实现，但 simple_func 无从得知，也就没法用异常描述符来告知。
-
-2. **显示指明异常类型后的重构**
-
-   ```c++
-   void func() throw(k_too_small_exception) // 显示指明异常类型
-   {
-       int k = third_party_lib_func(); // 一个第三方库的接口
-       if (k < 0)
-           throw k_too_small_exception();
-   }
-   ```
-
-   起初这个第三库的接口不会抛出异常，但若随着这个第三库的更新，`3rd_lib_func()` 加入了新的异常抛出，那么该函数也需要新加入异常类型。
-
-3. **异常抛出后的栈展开（Stack Unwinding）**
-
-   ```c++
-   void func_not_throw() throw() // 保证不抛出异常
-   {
-       ...
-       throw 1; // 但还是有异常抛出
-   }
-   ```
-
-   在 C++ 98 中，它会在调用处进行栈展开（Stack Unwinding）操作，但从函数的声明来看，程序员可能并不会对它进行 `try...catch...` 异常处理，所以经过一帧帧的栈展开后，程序最终还是会终止，但不必要的栈展开还是做了。
-
-其它更多的，可以参考：
-
-- [http://c.biancheng.net/cpp/biancheng/view/3027.html](http://c.biancheng.net/cpp/biancheng/view/3027.html)
-
-最终你会发现，使用 throw 异常说明符（Exception Specification），时常会感到它的鸡肋、啰嗦和麻烦。因此 C++11 摒弃了 throw 异常说明符（Exception Specification），
 
 ## C++ 11 noexcept
 
