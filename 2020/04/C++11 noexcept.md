@@ -115,7 +115,7 @@ void func_not_throw() noexcept
 }
 ```
 
-这会发生什么呢？程序会直接调用 [std::terminate(https://en.cppreference.com/w/cpp/error/terminate)，并且不会栈展开（也可能会调用或部分调用，取决于编译器的实现）。另外，即使你有使用 `try...catch...`，也无法捕获这个异常。
+这会发生什么呢？程序会直接调用 [std::terminate](https://en.cppreference.com/w/cpp/error/terminate)，并且不会栈展开（Stack Unwinding）（也可能会调用或部分调用，取决于编译器的实现）。另外，即使你有使用 try-catch，也无法捕获这个异常。
 
 ```c++
 #include <iostream>
@@ -142,7 +142,7 @@ int main()
 
 所以程序员在 noexcept 的使用上要格外小心！
 
-**noexcept 除了可以用作说明符（Specification），也可以用作运算符（Operator）**。noexcept 运算符是一个一元运算符，它的返回值是一个 bool 类型的右值常量表达式，用于表示给定的表达式是否会抛出异常。例如，
+**noexcept 除了可以用作说明符（Specifier），也可以用作运算符（Operator）**。noexcept 运算符是一个一元运算符，它的返回值是一个 bool 类型的右值常量表达式，用于表示给定的表达式是否会抛出异常。例如，
 
 ```c++
 void f() noexcept
@@ -175,7 +175,7 @@ public:
 };
 ```
 
-在为某个异常进行栈展开（Stack Unwinding）的时候，会依次调用当前作用域下每个局部对象的析构函数，如果这个时候析构函数又抛出自己的未经处理的另一个异常，将会导致 `std::terminate`。所以析构函数应该从不抛出异常。
+在为某个异常进行栈展开的时候，会依次调用当前作用域下每个局部对象的析构函数，如果这个时候析构函数又抛出自己的未经处理的另一个异常，将会导致 `std::terminate`。所以析构函数应该从不抛出异常。
 
 ## 显示指定异常说明符的益处
 
@@ -241,7 +241,7 @@ public:
 
 ## 使用建议
 
-你说编写的函数**默认都不使用**，只有遇到以下的情况你再思考是否需要使用，
+我们所编写的函数**默认都不使用**，只有遇到以下的情况你再思考是否需要使用，
 
 
 1. **析构函数**
