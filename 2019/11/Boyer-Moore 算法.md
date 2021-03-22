@@ -1,6 +1,6 @@
 上一篇文章，我介绍了 [KMP 算法](https://ethsonliu.com/2018/04/kmp.html)。
 
-但是，它并不是效率最高的算法，实际采用并不多。各种文本编辑器的"查找"功能（Ctrl+F），大多采用 Boyer-Moore 算法。Boyer-Moore 算法不仅效率高，而且构思巧妙。1977 年，德克萨斯大学的 Robert S. Boyer 教授和 J Strother Moore 教授发明了这种算法。
+但是，它并不是效率最高的算法，实际采用并不多。各种文本编辑器的 "查找" 功能（Ctrl+F），大多采用 Boyer-Moore 算法。Boyer-Moore 算法不仅效率高，而且构思巧妙。1977 年，德克萨斯大学的 Robert S. Boyer 教授和 J Strother Moore 教授发明了这种算法。
 
 ## 算法过程
 
